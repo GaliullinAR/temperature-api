@@ -11,6 +11,8 @@ const storageList = document.querySelector('.storage__list');
 console.log(error404)
 search.addEventListener('submit', function(e) {
     e.preventDefault();
+
+    storageContent.classList.remove('active');
     
     let storageArray = [];
     let currentStorage = JSON.parse(localStorage.getItem('values'));
@@ -79,7 +81,6 @@ search.addEventListener('submit', function(e) {
         weatherDetails.classList.add('fade-in');
         container.style.height = '590px';
 
-
     })
     .catch(error => {
         container.style.height = '400px';
@@ -128,4 +129,3 @@ function selectItemValue(e) {
     document.querySelector('.search-input').value = targetValue;
 }
 
-localStorage.clear()
