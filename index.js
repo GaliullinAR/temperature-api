@@ -5,16 +5,34 @@ const weatherDetails = document.querySelector('.weather-details');
 const error404 = document.querySelector('.not-found');
 const button = document.querySelector('.search-btn');
 
+const storageContent = document.querySelector('.storage-content');
+const storageList = document.querySelector('.storage__list');
+
 console.log(error404)
 search.addEventListener('submit', function(e) {
     e.preventDefault();
     
+    let storageArray = [];
+    let currentStorage = JSON.parse(localStorage.getItem('values'));
     const APIKey = 'f0ab883fd1d10d9e4ab98883ae4cd983';
     const city = search.querySelector('.search-input').value;
 
     if(city === '') {
         return;
     }
+
+    if (currentStorage !== null) {
+        let items = JSON.parse(localStorage.getItem('values'));
+        storageArray = items.map(item => item);
+    }
+
+    storageArray.push(city.toUpperCase());
+
+    if (storageArray.length > 3) {
+        storageArray.shift();
+    }
+
+    localStorage.setItem('values', JSON.stringify(storageArray));
 
     fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${APIKey}`)
     .then(response => response.json())
@@ -72,3 +90,40 @@ search.addEventListener('submit', function(e) {
     }) 
 
 })
+
+search.addEventListener('click', renderHistory);
+
+storageList.addEventListener('click', selectItemValue);
+    
+function renderHistory() {
+    let height = parseInt(container.style.height);
+
+    if (height !== 590) {
+
+        if (storageContent.classList.contains('active')) {
+            storageContent.classList.remove('active');
+        } else {
+            storageContent.classList.add('active');
+            showHistory();
+        }
+
+    } else {
+        search.removeEventListener('click', renderHistory);
+    }
+}
+
+function showHistory() {
+    let arr = JSON.parse(localStorage.getItem('values'));
+    let result = new Set(arr);
+
+    storageList.innerHTML = '';
+
+    result.forEach(item => {
+        storageList.insertAdjacentHTML('beforeend', `<li class="storage__item">${item}</li>`);
+    })
+}
+
+function selectItemValue(e) {
+    let targetValue = e.target.textContent;
+    document.querySelector('.search-input').value = targetValue;
+}
