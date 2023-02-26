@@ -127,3 +127,5 @@ function selectItemValue(e) {
     let targetValue = e.target.textContent;
     document.querySelector('.search-input').value = targetValue;
 }
+
+localStorage.clear()

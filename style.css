@@ -198,7 +198,6 @@ body {
     box-shadow: 0 0 4px; 
     transition: all 0.3s ease-out;
     overflow-y: hidden;
-    border: 1px solid #fff;
 }
 
 .storage__list {
